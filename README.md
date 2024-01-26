@@ -1,36 +1,40 @@
-- [LearnDocker](#learndocker)
-  - [1. 安装 Docker](#1-安装-docker)
-    - [1.1. ubuntu 安装 docker](#11-ubuntu-安装-docker)
-  - [2. 镜像](#2-镜像)
-    - [2.1. 拉取镜像](#21-拉取镜像)
-    - [2.2. 创建自己的镜像](#22-创建自己的镜像)
-      - [2.2.1. 用容器创建镜像](#221-用容器创建镜像)
-      - [2.2.2. 利用 Dockerfile 来创建镜像](#222-利用-dockerfile-来创建镜像)
-    - [2.3. 存出和载入镜像](#23-存出和载入镜像)
-      - [2.3.1. 存出镜像](#231-存出镜像)
-      - [2.3.2. 载入镜像](#232-载入镜像)
-      - [2.3.3. 移除镜像](#233-移除镜像)
-  - [3. 容器](#3-容器)
-    - [3.1. 启动容器](#31-启动容器)
-      - [3.1.1. 新建并启用容器](#311-新建并启用容器)
-      - [3.1.2. 启用已经终止的容器](#312-启用已经终止的容器)
-      - [3.1.3. 后台运行的方式启用容器](#313-后台运行的方式启用容器)
-    - [3.2. 进入容器](#32-进入容器)
-      - [3.2.1. attach 命令](#321-attach-命令)
-      - [3.2.2. nsenter 命令](#322-nsenter-命令)
-    - [3.3. 导入和导出容器](#33-导入和导出容器)
-      - [3.3.1. 导出容器](#331-导出容器)
-      - [3.3.2. 导入容器](#332-导入容器)
-    - [3.4. 终止容器](#34-终止容器)
-    - [3.5. 删除容器](#35-删除容器)
-  - [4. 仓库](#4-仓库)
-  - [5. 数据管理](#5-数据管理)
-    - [5.1. 数据卷](#51-数据卷)
-    - [5.2. 创建数据卷](#52-创建数据卷)
-  - [6. 使用网络](#6-使用网络)
+- [1. 安装 Docker](#1-安装-docker)
+  - [1.1. ubuntu 安装 docker](#11-ubuntu-安装-docker)
+- [2. 镜像](#2-镜像)
+  - [2.1. 拉取镜像](#21-拉取镜像)
+  - [2.2. 创建自己的镜像](#22-创建自己的镜像)
+    - [2.2.1. 用容器创建镜像](#221-用容器创建镜像)
+    - [2.2.2. 利用 Dockerfile 来创建镜像](#222-利用-dockerfile-来创建镜像)
+  - [2.3. 存出和载入镜像](#23-存出和载入镜像)
+    - [2.3.1. 存出镜像](#231-存出镜像)
+    - [2.3.2. 载入镜像](#232-载入镜像)
+    - [2.3.3. 移除镜像](#233-移除镜像)
+- [3. 容器](#3-容器)
+  - [3.1. 启动容器](#31-启动容器)
+    - [3.1.1. 新建并启用容器](#311-新建并启用容器)
+    - [3.1.2. 启用已经终止的容器](#312-启用已经终止的容器)
+    - [3.1.3. 后台运行的方式启用容器](#313-后台运行的方式启用容器)
+  - [3.2. 进入容器](#32-进入容器)
+    - [3.2.1. attach 命令](#321-attach-命令)
+    - [3.2.2. nsenter 命令](#322-nsenter-命令)
+  - [3.3. 导入和导出容器](#33-导入和导出容器)
+    - [3.3.1. 导出容器](#331-导出容器)
+    - [3.3.2. 导入容器](#332-导入容器)
+  - [3.4. 终止容器](#34-终止容器)
+  - [3.5. 删除容器](#35-删除容器)
+- [4. 仓库](#4-仓库)
+- [5. 数据管理](#5-数据管理)
+  - [5.1. 数据卷](#51-数据卷)
+  - [5.2. 创建数据卷](#52-创建数据卷)
+- [6. 使用网络](#6-使用网络)
+- [7. 項目打包爲docker](#7-項目打包爲docker)
+  - [7.1. Dockerfile生成鏡像](#71-dockerfile生成鏡像)
+  - [7.2. 鏡像轉存爲文件](#72-鏡像轉存爲文件)
+  - [7.3. 通過文件載入鏡像](#73-通過文件載入鏡像)
+  - [7.4. 單獨運行docker](#74-單獨運行docker)
+  - [7.5. docker-compose.yml](#75-docker-composeyml)
 
 
-# LearnDocker
 
 ## 1. 安装 Docker
 
@@ -266,4 +270,59 @@ sudo docker run -it -P -v /src/webapp:/opt/webapp ubuntu:v2
 
 ```
 sudo docker run -d -p 5000:5000 -p 3000:80 training/webapp
+```
+
+## 7. 項目打包爲docker
+### 7.1. Dockerfile生成鏡像
+构建镜像：在包含 Dockerfile 的目录中运行以下命令来构建镜像。yourapp 是你给镜像起的名字，. 指的是当前目录（包含 Dockerfile）。
+```
+docker build -t yourapp .
+docker images
+```
+### 7.2. 鏡像轉存爲文件
+```
+sudo docker export 7691a814370e > app.tar
+```
+### 7.3. 通過文件載入鏡像
+```
+sudo docker load --input ubuntu_14.04.tar
+#或者
+sudo docker load < ubuntu_14.04.tar
+```
+### 7.4. 單獨運行docker
+```
+sudo docker run -t -i ubuntu:v2 /bin/bash
+```
+### 7.5. docker-compose.yml
+通過docker-compose.yml
+```
+version: "3"
+services:
+  nginx:
+    image: dji/nginx:xinjiang-yining-kuang-001
+    restart: "always"
+    ports:
+      - "3:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime
+  cloud_api_sample:
+    image: dji/cloud_api_sample:xinjiang-yining-kuang-001
+    ports:
+      - "2:6789"
+    volumes:
+      - /etc/localtime:/etc/localtime
+    hostname: cloud_api_sample
+    restart: "always"
+```
+要使用这个 docker-compose.yml 文件，你需要安装Docker Compose工具，然后在包含这个文件的目录中运行以下命令：
+```
+docker-compose up
+```
+这个命令会启动定义在 docker-compose.yml 文件中的所有服务。如果你想在后台运行这些服务，可以添加 -d 标志：
+```
+docker-compose up -d
+```
+要停止并移除由 docker-compose.yml 文件定义的所有容器，可以使用：
+```
+docker-compose down
 ```
